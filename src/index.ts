@@ -2,7 +2,7 @@ import { ApolloServer } from "apollo-server";
 import { connectToMongoDB } from "./db/mongo"
 import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
-import { getUserFromToken } from "./auth";
+import { getTrainerFromToken } from "./auth";
 
 const start = async () => {
   await connectToMongoDB();
@@ -12,8 +12,8 @@ const start = async () => {
     resolvers,
     context: async ({ req }) => {
       const token = req.headers.authorization || "";
-      const user = token ? await getUserFromToken(token as string) : null;
-      return { user };
+      const trainer = token ? await getTrainerFromToken(token as string) : null;
+      return { user: trainer };
     },
   });
 

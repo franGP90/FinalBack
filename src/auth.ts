@@ -10,10 +10,10 @@ dotenv.config()
 const SECRET_KEY = process.env.SECRET;
 
 type TokenPayload = {
-    userId: string;
+    trainerId: string;
 }
 
-export const signToken = (userId: string) => jwt.sign({ userId }, SECRET_KEY!, { expiresIn: 6000 });
+export const signToken = (userId: string) => jwt.sign({ userId }, SECRET_KEY!, { expiresIn: 60000 });
 
 export const verifyToken = (token: string): TokenPayload | null => {
     try{
@@ -24,11 +24,11 @@ export const verifyToken = (token: string): TokenPayload | null => {
     }
 };
 
-export const getUserFromToken = async (token: string) => {
+export const getTrainerFromToken = async (token: string) => {
     const payload = verifyToken(token);
     if(!payload) return null;
     const db = getDB();
     return await db.collection(COLLECTION_TRAINERS).findOne({
-        _id: new ObjectId(payload.userId)
+        _id: new ObjectId(payload.trainerId)
     })
 }
